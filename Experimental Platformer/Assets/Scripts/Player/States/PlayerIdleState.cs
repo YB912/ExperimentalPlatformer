@@ -1,18 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class PlayerIdleState : MonoBehaviour
+namespace Player
 {
-    // Start is called before the first frame update
-    void Start()
+    internal class PlayerIdleState : BaseState
     {
-        
-    }
+        private PlayerMainScript main;
+        public override void EnterState(StateMachine stateMachine)
+        {
+            base.EnterState(stateMachine);
+            main = GetComponent<PlayerMainScript>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            main.inputActions.OnFoot.Move.started += OnMovementAction;
+            main.inputActions.OnFoot.Jump.started += OnMovementAction;
+
+            main.HorizontalMovement = 0;
+            main.rigidBody.velocity = Vector2.zero;
+        }
+
+        private void OnMovementAction(InputAction.CallbackContext context)
+        {
+            main.HorizontalMovement = context.ReadValue<Vector2>().x;
+            if (context.ReadValue<Vector2>().x != 0)
+            {
+                StateMachine.SetNextState(new PlayerRunningState());
+            }
+        }
+
+        public override void ExitState()
+        {
+            base.ExitState();
+            main.inputActions.OnFoot.Move.started -= OnMovementAction;
+            main.inputActions.OnFoot.Jump.started -= OnMovementAction;
+        }
+
     }
 }

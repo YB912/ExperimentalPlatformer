@@ -37,7 +37,7 @@ public class PlayerJump : MonoBehaviour
 
     private void OnDisable()
     {
-        playerInputActions.OnFoot.Disable();
+        //playerInputActions.OnFoot.Disable();
     }
 
     private void Update()
@@ -70,7 +70,6 @@ public class PlayerJump : MonoBehaviour
             {
                 isJumping = true;
                 jumpCounter++;
-                Debug.Log(jumpCounter);
             }
         } 
         else if (context.canceled)
@@ -81,7 +80,7 @@ public class PlayerJump : MonoBehaviour
 
     private bool IsGrounded()
     {
-        return Physics2D.BoxCast(collider.bounds.center, collider.bounds.size, 0f, Vector2.down, groundedBoxCastOffset);
+        return Physics2D.BoxCast(collider.bounds.center, collider.bounds.size, 0f, Vector2.down, groundedBoxCastOffset, groundLayerMask);
     }
 
     private void SetVerticalVelocity()

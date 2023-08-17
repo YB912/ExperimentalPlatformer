@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseState : IBaseState
+public class BaseState : IBaseState
 {
     protected float UpdateTime { get; set; }
     protected float FixedTime { get; set; }
     protected float LateTime { get; set; }
 
     public StateMachine StateMachine;
+
 
     public virtual void EnterState(StateMachine stateMachine)
     {

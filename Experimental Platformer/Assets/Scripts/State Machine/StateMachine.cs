@@ -3,30 +3,31 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour, IStateMachine
 {
-    [SerializeField] BaseState mainState;
+    public BaseState MainState { get; set; }
     public IBaseState CurrentState { get; private set; }
     private IBaseState nextState;
 
-    void Awake()
+    private void Start()
     {
         SetMainAsNextState();
+        Debug.Log("The main state is: " + MainState.GetType());
     }
-    void Update()
+    private void Update()
     {
         if (nextState != null) { SetState(nextState); }
         CurrentState?.Update();
     }
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         CurrentState?.FixedUpdate();
     }
-    void LateUpdate()
+    private void LateUpdate()
     {
         CurrentState?.LateUpdate();
     }
     public void SetMainAsNextState()
     {
-        nextState = mainState;
+        nextState = MainState;
     }
     public void SetNextState(IBaseState nextState)
     {
@@ -43,6 +44,7 @@ public class StateMachine : MonoBehaviour, IStateMachine
             CurrentState?.ExitState();
             CurrentState = newState;
             CurrentState.EnterState(this);
+            Debug.Log("Current state is: " + CurrentState.GetType());
         }
     }
 }
